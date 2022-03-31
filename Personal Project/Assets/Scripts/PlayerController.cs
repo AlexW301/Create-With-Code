@@ -16,10 +16,12 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         moveDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
+        // moveDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
     }
 
     void FixedUpdate()
     {
+        // GetComponent<Rigidbody>().AddForce(moveDirection, ForceMode.Impulse);
         GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position + transform.TransformDirection(moveDirection));
     }
 }
