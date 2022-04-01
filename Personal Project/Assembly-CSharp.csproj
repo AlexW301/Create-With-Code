@@ -38,9 +38,13 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\PlayerGravity.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
+     <Compile Include="Assets\SpaceSkies Free\Demo\Scripts\LookCamera.cs" />
      <Compile Include="Assets\Scripts\PlanetScript.cs" />
      <Compile Include="Assets\SpaceSkies Free\Demo\Scripts\SkyboxChanger.cs" />
-     <Compile Include="Assets\SpaceSkies Free\Demo\Scripts\LookCamera.cs" />
+     <Compile Include="Assets\Scripts\ProjectileForce.cs" />
+     <Compile Include="Assets\Scripts\SpawnManager.cs" />
+     <Compile Include="Assets\Scripts\GravityAroundPlayer.cs" />
+     <Compile Include="Assets\Scripts\ObstacleGravity.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.31f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
