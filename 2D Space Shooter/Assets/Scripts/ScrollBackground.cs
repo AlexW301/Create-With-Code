@@ -17,7 +17,7 @@ public class ScrollBackground : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.y < -2.04f)
+        if (transform.position.y < repeatWidth - startPos.y)
         {
             transform.position = startPos;
         }
