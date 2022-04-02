@@ -11,13 +11,13 @@ public class ScrollBackground : MonoBehaviour
     void Start()
     {
         startPos = transform.position;
-        repeatWidth = GetComponent<BoxCollider2D>().size.y;
+        repeatWidth = GetComponent<BoxCollider2D>().size.y / 2;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.y < startPos.y - repeatWidth)
+        if (transform.position.y < -2.04f)
         {
             transform.position = startPos;
         }
