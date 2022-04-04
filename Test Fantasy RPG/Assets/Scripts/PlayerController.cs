@@ -19,10 +19,11 @@ public class PlayerController : MonoBehaviour
         Vector3 horizontalInput = new Vector3(Input.GetAxis("Horizontal"), 0f, 0f);
         transform.position += horizontalInput * Time.deltaTime * speed;
 
-        //Vertical Movement
+        // Vertical Movement
         Vector3 verticalInput = new Vector3(0f, Input.GetAxis("Vertical"), 0f);
         transform.position += verticalInput * Time.deltaTime * speed;
 
+        // Sets animator parameter to trigger walking animation
         animator.SetFloat("Speed", horizontalInput.magnitude + verticalInput.magnitude);
     }
 }
