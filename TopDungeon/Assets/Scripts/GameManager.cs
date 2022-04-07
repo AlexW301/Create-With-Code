@@ -1,13 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     private void Awake()
     {
+        if(GameManager.instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
         instance = this;
+        SceneManager.sceneLoaded += LoadState;
+        DontDestroyOnLoad(gameObject);
+        // LoadState();
     }
 
     // Resources
@@ -19,19 +28,51 @@ public class GameManager : MonoBehaviour
     // Refrences
     public Player player;
     // public weapon weapon...
+    public FloatingTextManager floatingTextManager;
 
     // Logic
     public int pesos;
     public int experience;
 
-    // Save State
-    public void SaveState()
+    // Floating text
+    public void ShowText(string msg, int fontSize, Color color, Vector3 position, Vector3 motion, float duration)
     {
-        Debug.LogFormat("SaveState");
+        floatingTextManager.Show(msg, fontSize, color, position, motion, duration);
     }
 
-    public void LoadState()
+    // Save State
+    /*
+    * INT preferedSkin
+    * INT pesos
+    * INT experience
+    * INT weaponLevel
+    */
+
+    public void SaveState()
     {
-        Debug.LogFormat("LoadState");
+        string s = "";
+
+        s += "0" + "|";
+        s += pesos.ToString() + "|";
+        s += experience.ToString() + "|";
+        s += "0";
+
+        PlayerPrefs.SetString("SaveState", s);
     }
+
+    public void LoadState(Scene scene, LoadSceneMode mode)
+    {
+        if (!PlayerPrefs.HasKey("SaveState"))
+            return;
+
+        string[] data = PlayerPrefs.GetString("SaveState").Split('|');
+
+        // Change player sking
+        pesos = int.Parse(data[1]);
+        experience = int.Parse(data[2]);
+        // Change weapon level
+
+        Debug.Log(pesos);
+    }
+
 }

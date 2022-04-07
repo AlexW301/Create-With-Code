@@ -12,7 +12,8 @@ public class Chest : Collectable
         {
             collected = true;
             GetComponent<SpriteRenderer>().sprite = emptyChest;
-            Debug.Log("Grant" + pesosAmount);
+            GameManager.instance.pesos += pesosAmount;
+            GameManager.instance.ShowText("+" + pesosAmount + " pesos!", 25, Color.yellow, transform.position, Vector3.up * 30, 2.0f);
         }
     }
 }
