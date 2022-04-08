@@ -2,42 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Mover
 {
-    private BoxCollider2D boxCollider;
-    private Vector3 moveDelta;
-    private bool facingRight = true;
-    public float speed = 7f;
-    private RaycastHit2D hit;
-
-    private void Start()
-    {
-        boxCollider = GetComponent<BoxCollider2D>();
-    }
-
     private void FixedUpdate()
     {
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
 
-        //   Reset moveDelta
-        moveDelta = new Vector3(x, y, 0) * speed;
-
-        // Sawp sprite direction whether you're going right or left
-
-        if (moveDelta.x > 0 && !facingRight)
-        {
-            transform.localScale = Vector3.one;
-            facingRight = true;
-        }
-        else if (moveDelta.x < 0 && facingRight)
-        {
-            transform.localScale = new Vector3(-1, 1, 1);
-            facingRight = false;
-        }
-
-        // Make this thing move!
-        transform.Translate(moveDelta * Time.deltaTime);
+        UpdateMotor(new Vector3(x, y, 0));
     }
 }
 
