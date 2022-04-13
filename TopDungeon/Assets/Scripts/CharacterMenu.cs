@@ -17,51 +17,75 @@ public class CharacterMenu : MonoBehaviour
     // Charater Selection
     public void onArrowClick(bool right)
     {
-        if(right)
+        if (right)
         {
             currentCharacterSelection++;
 
             // If we went too far away
-            if(currentCharacterSelection == GameManager.instance.playerSprites.Count)
+            if (currentCharacterSelection == GameManager.instance.playerSprites.Count)
                 currentCharacterSelection = 0;
 
-                OnSelectionChanged();
+            OnSelectionChanged();
         }
         else
         {
             currentCharacterSelection--;
 
             // If we went too far away
-            if(currentCharacterSelection < 0)
+            if (currentCharacterSelection < 0)
                 currentCharacterSelection = GameManager.instance.playerSprites.Count - 1;
 
-                OnSelectionChanged();
+            OnSelectionChanged();
         }
     }
     private void OnSelectionChanged()
     {
         characterSelectionSprite.sprite = GameManager.instance.playerSprites[currentCharacterSelection];
+        GameManager.instance.player.SwapSprite(currentCharacterSelection);
     }
 
     // Weapon Upgrade
     public void OnUpgradeClick()
     {
-        // 
+        if (GameManager.instance.TryUpgradeWeapon())
+        {
+            UpdateMenu();
+        }
     }
 
     // Update the Character information
     public void UpdateMenu()
     {
         // Weapon
-        weaponSprite.sprite = GameManager.instance.weaponSprites[0];
-        upgradeCostText.text = "NOT IMPLEMENTED YET";
+        weaponSprite.sprite = GameManager.instance.weaponSprites[GameManager.instance.weapon.weaponLevel];
+        if (GameManager.instance.weapon.weaponLevel == GameManager.instance.weaponPrices.Count)
+            upgradeCostText.text = "MAX";
+        else
+            upgradeCostText.text = GameManager.instance.weaponPrices[GameManager.instance.weapon.weaponLevel].ToString();
+
         // Meta
-        levelText.text = "NOT IMPLEMENTED YET";
+        levelText.text = GameManager.instance.GetCurrentLevel().ToString();
         hitpointText.text = GameManager.instance.player.hitpoint.ToString();
         pesosText.text = GameManager.instance.pesos.ToString();
 
         // XP Bar
-        xpText.text = "NOT IMPLEMENTED YET";
-        xpBar.localScale = new Vector3(0.5f, 0, 0);
+        int currLevel = GameManager.instance.GetCurrentLevel();
+        if (GameManager.instance.GetCurrentLevel() == GameManager.instance.xpTable.Count)
+        {
+            xpText.text = GameManager.instance.experience.ToString() + " total experience points"; // Display total xp
+            xpBar.localScale = Vector3.one;
+        }
+        else
+        {
+            int prevLevelXp = GameManager.instance.GetXpToLevel(currLevel - 1);
+            int currLevelXp = GameManager.instance.GetXpToLevel(currLevel);
+
+            int diff = currLevelXp - prevLevelXp;
+            int currXpIntoLevel = GameManager.instance.experience - prevLevelXp;
+
+            float completionRatio = (float)currXpIntoLevel / (float)diff;
+            xpBar.localScale = new Vector3(completionRatio, -0.53f, 1);
+            xpText.text = currXpIntoLevel.ToString() + " / " + diff;
+        }
     }
 }

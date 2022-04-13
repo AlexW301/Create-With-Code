@@ -8,6 +8,11 @@ public class CameraMotor : MonoBehaviour
     public float boundX = .5f;
     public float boundY = 0.05f;
 
+    private void Start()
+    {
+        lookAt = GameObject.Find("Player").transform;
+    }
+
     // Late update will move after the player is done moving in fixed update
     private void LateUpdate()
     {
