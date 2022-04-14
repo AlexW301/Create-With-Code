@@ -11,11 +11,15 @@ public class GameManager : MonoBehaviour
         if (GameManager.instance != null)
         {
             Destroy(gameObject);
+            Destroy(player.gameObject);
+            Destroy(floatingTextManager.gameObject);
+            Destroy(menu.gameObject);
+            Destroy(hud.gameObject);
             return;
         }
         instance = this;
         SceneManager.sceneLoaded += LoadState;
-        DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject);
         // LoadState();
     }
 
@@ -29,7 +33,9 @@ public class GameManager : MonoBehaviour
     public Player player;
     public Weapon weapon;
     public FloatingTextManager floatingTextManager;
-
+    public RectTransform hitpointBar;
+    public GameObject hud;
+    public GameObject menu;
     // Logic
     public int pesos;
     public int experience;
@@ -58,6 +64,12 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
+    // Hitpoint Bar
+    public void OnHitPointChange()
+    {
+        float ratio = (float)player.hitpoint / (float)player.maxHitpoint;
+        hitpointBar.localScale = new Vector3(1, ratio, 1);
+    }
     // Experience System
     public int GetCurrentLevel()
     {
@@ -121,6 +133,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadState(Scene scene, LoadSceneMode mode)
     {
+        SceneManager.sceneLoaded += LoadState;
         if (!PlayerPrefs.HasKey("SaveState"))
             return;
 
