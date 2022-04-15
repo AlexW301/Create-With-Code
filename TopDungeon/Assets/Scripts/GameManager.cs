@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
         }
         instance = this;
         SceneManager.sceneLoaded += LoadState;
+        SceneManager.sceneLoaded += OnSceneLoaded;
         // DontDestroyOnLoad(gameObject);
         // LoadState();
     }
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
     public RectTransform hitpointBar;
     public GameObject hud;
     public GameObject menu;
+    public Animator deathMenuAnim;
     // Logic
     public int pesos;
     public int experience;
@@ -53,7 +55,7 @@ public class GameManager : MonoBehaviour
         if (weaponPrices.Count <= weapon.weaponLevel)
             return false;
 
-        if(pesos >= weaponPrices[weapon.weaponLevel])
+        if (pesos >= weaponPrices[weapon.weaponLevel])
         {
             pesos -= weaponPrices[weapon.weaponLevel];
             weapon.UpgradeWeapon();
@@ -76,7 +78,7 @@ public class GameManager : MonoBehaviour
         int r = 0;
         int add = 0;
 
-        while(experience >= add)
+        while (experience >= add)
         {
             add += xpTable[r];
             r++;
@@ -92,7 +94,7 @@ public class GameManager : MonoBehaviour
         int r = 0;
         int xp = 0;
 
-        while(r < level)
+        while (r < level)
         {
             xp += xpTable[r];
             r++;
@@ -104,12 +106,26 @@ public class GameManager : MonoBehaviour
     {
         int currLevel = GetCurrentLevel();
         experience += xp;
-        if(currLevel < GetCurrentLevel())
+        if (currLevel < GetCurrentLevel())
             OnLevelUp();
     }
     public void OnLevelUp()
     {
         player.OnLevelUp();
+        OnHitPointChange();
+    }
+
+    public void OnSceneLoaded(Scene s, LoadSceneMode mode)
+    {
+        player.transform.position = GameObject.Find("SpawnPoint").transform.position;
+    }
+
+    // Death Menu and Respawn
+    public void Respawn()
+    {
+        deathMenuAnim.SetTrigger("Hide");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
+        player.Respawn();
     }
     // Save State
     /*
@@ -133,7 +149,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadState(Scene scene, LoadSceneMode mode)
     {
-        SceneManager.sceneLoaded += LoadState;
+        SceneManager.sceneLoaded -= LoadState;
         if (!PlayerPrefs.HasKey("SaveState"))
             return;
 
@@ -142,13 +158,11 @@ public class GameManager : MonoBehaviour
         // Change player skin
         pesos = int.Parse(data[1]);
         experience = int.Parse(data[2]);
-        if(GetCurrentLevel() != 1)
+        if (GetCurrentLevel() != 1)
             player.SetLevel(GetCurrentLevel());
         // Change weapon level
         weapon.SetWeaponLevel(int.Parse(data[3]));
         weapon.weaponLevel = int.Parse(data[3]);
-        
-        player.transform.position = GameObject.Find("SpawnPoint").transform.position;
     }
 
 }

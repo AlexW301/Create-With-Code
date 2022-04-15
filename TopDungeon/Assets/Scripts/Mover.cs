@@ -9,8 +9,8 @@ public abstract class Mover : Fighter
     private bool facingRight = true;
     public float speed = 7f;
     private RaycastHit2D hit;
-    protected float ySpeed = 4f;
-    protected float xSpeed = 5f;
+    public float ySpeed = 4f;
+    public float xSpeed = 5f;
 
     protected virtual void Start()
     {
